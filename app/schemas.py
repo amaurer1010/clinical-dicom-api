@@ -10,6 +10,15 @@ class DicomMetadata(BaseModel):
     rows: Optional[int] = None
     columns: Optional[int] = None
     pixel_spacing: Optional[str] = None
+    slice_thickness: Optional[str] = None
+    number_of_slices: Optional[str] = None
+    series_description: Optional[str] = None
+    study_description: Optional[str] = None
+    cardiac_trigger: Optional[str] = None
+    trigger_delay: Optional[str] = None
+    heart_rate: Optional[str] = None
+    manufacturer: Optional[str] = None
+    manufacturer_model: Optional[str] = None
 
 class SummaryResponse(BaseModel):
     metadata: DicomMetadata

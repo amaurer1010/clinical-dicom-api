@@ -20,4 +20,13 @@ def extract_metadata(file_bytes: bytes) -> DicomMetadata:
         rows=int(ds.Rows) if hasattr(ds, "Rows") else None,
         columns=int(ds.Columns) if hasattr(ds, "Columns") else None,
         pixel_spacing=get("PixelSpacing"),
+        slice_thickness=get("SliceThickness"),
+        number_of_slices=get("NumberOfSlices"),
+        series_description=get("SeriesDescription"),
+        study_description=get("StudyDescription"),
+        cardiac_trigger=get("TriggerSourceOrType"),
+        trigger_delay=get("TriggerDelayTime"),
+        heart_rate=get("HeartRate"),
+        manufacturer=get("Manufacturer"),
+        manufacturer_model=get("ManufacturerModelName"),
     )
