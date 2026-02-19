@@ -1,7 +1,8 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from app.dicom_parser import extract_metadata
 from app.llm_client import summarize_metadata, compare_metadata
-from app.schemas import DicomMetadata, SummaryResponse, CompareResponse
+from app.fhir_converter import to_fhir_imaging_study
+from app.schemas import DicomMetadata, SummaryResponse, CompareResponse, FHIRResponse
 
 app = FastAPI(
     title="Clinical DICOM Analysis API",
@@ -57,3 +58,15 @@ async def compare_dicom(
         )
     except Exception as e:
         raise HTTPException(status_code=422, detail=f"Error comparing files: {str(e)}")
+    
+@app.post("/dicom/fhir", response_model=FHIRResponse)
+async def dicom_to_fhir(file: UploadFile = File(...)):
+    if not file.filename.endswith(".dcm"):
+        raise HTTPException(status_code=400, detail="File must be a .dcm DICOM file")
+    try:
+        contents = await file.read()
+        metadata = extract_metadata(contents)
+        fhir_resource = to_fhir_imaging_study(metadata)
+        return FHIRResponse(resourceType="ImagingStudy", fhir_resource=fhir_resource)
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=f"Error converting to FHIR: {str(e)}")    

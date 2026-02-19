@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Any
 
 class DicomMetadata(BaseModel):
     patient_id: Optional[str] = None
@@ -29,3 +29,9 @@ class CompareResponse(BaseModel):
     file1_metadata: DicomMetadata
     file2_metadata: DicomMetadata
     comparison: str
+
+
+
+class FHIRResponse(BaseModel):
+    resourceType: str
+    fhir_resource: dict[str, Any]    
