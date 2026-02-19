@@ -23,3 +23,9 @@ class DicomMetadata(BaseModel):
 class SummaryResponse(BaseModel):
     metadata: DicomMetadata
     summary: str
+
+
+class CompareResponse(BaseModel):
+    file1_metadata: DicomMetadata
+    file2_metadata: DicomMetadata
+    comparison: str

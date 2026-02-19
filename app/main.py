@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from app.dicom_parser import extract_metadata
-from app.llm_client import summarize_metadata
-from app.schemas import DicomMetadata, SummaryResponse
+from app.llm_client import summarize_metadata, compare_metadata
+from app.schemas import DicomMetadata, SummaryResponse, CompareResponse
 
 app = FastAPI(
     title="Clinical DICOM Analysis API",
@@ -34,3 +34,26 @@ async def summarize_dicom(file: UploadFile = File(...)):
         return SummaryResponse(metadata=metadata, summary=summary)
     except Exception as e:
         raise HTTPException(status_code=422, detail=f"Error processing file: {str(e)}")
+    
+
+@app.post("/dicom/compare", response_model=CompareResponse)
+async def compare_dicom(
+    file1: UploadFile = File(...),
+    file2: UploadFile = File(...)
+):
+    for f in [file1, file2]:
+        if not f.filename.endswith(".dcm"):
+            raise HTTPException(status_code=400, detail=f"{f.filename} must be a .dcm DICOM file")
+    try:
+        contents1 = await file1.read()
+        contents2 = await file2.read()
+        metadata1 = extract_metadata(contents1)
+        metadata2 = extract_metadata(contents2)
+        comparison = compare_metadata(metadata1, metadata2)
+        return CompareResponse(
+            file1_metadata=metadata1,
+            file2_metadata=metadata2,
+            comparison=comparison
+        )
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=f"Error comparing files: {str(e)}")
