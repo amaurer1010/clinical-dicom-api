@@ -1,22 +1,46 @@
 # Clinical DICOM Analysis API
 
-A FastAPI service that extracts structured metadata from DICOM medical imaging files, generates plain-language clinical summaries using the Anthropic Claude API, and converts studies to FHIR ImagingStudy resources for health system interoperability.
+A FastAPI service that extracts structured metadata from DICOM medical imaging 
+files, generates plain-language clinical summaries using the Anthropic Claude 
+API, and converts studies to FHIR ImagingStudy resources for health system 
+interoperability.
 
-Built with the assistance of Claude  as a portfolio project to demonstrate healthcare domain knowledge combined with modern backend development — directly relevant to clinical workflow integration work.
+---
+
+## Motivation
+
+This project was built as a portfolio piece to demonstrate practical skills in 
+Python, FastAPI, Docker, REST API design, and LLM integration. I also wanted 
+to highlight domain knowledge I built up over years of working with medical 
+imaging data, which gave me a concrete and meaningful context to apply these 
+tools to rather than building something generic.
 
 ---
 
 ## Development Approach
 
-This project was built collaboratively with Claude (Anthropic) as a learning and portfolio exercise. The domain knowledge — DICOM workflows, cardiac gating parameters, clinical imaging pipelines — comes from my research engineering experience at AKH Vienna. The software architecture, FastAPI patterns, and FHIR implementation were developed through an iterative back-and-forth with Claude, reflecting how I approach new technical domains: combining existing expertise with AI-assisted learning to move quickly without sacrificing code quality.
+This project was built collaboratively with Claude (Anthropic) as a learning 
+exercise. The domain knowledge, including DICOM workflows, cardiac gating 
+parameters, and clinical imaging pipelines, comes from my research engineering 
+experience at AKH Vienna. The software architecture, FastAPI patterns, and FHIR 
+implementation were developed through an iterative process with Claude, 
+reflecting how I approach new technical domains: combining existing expertise 
+with AI-assisted learning to move quickly without sacrificing code quality.
 
-This is also a deliberate reflection of how I expect to work in a Forward Deployed Engineer role — using the best available tools, including LLMs, to prototype and validate ideas rapidly.
+This is also a deliberate reflection of how I expect to work in a Forward 
+Deployed Engineer role, using the best available tools including LLMs to 
+prototype and validate ideas rapidly.
 
 ---
 
 ## Background
 
-During my time as a research engineer at the Ludwig Boltzmann Institute @ AKH Vienna, I worked with DICOM data from cardiac 4D CT studies — extracting imaging data from PACS, segmenting patient-specific heart models, and collaborating with clinicians on device positioning and scan timing. This project reflects that experience: the metadata fields selected, including cardiac gating parameters like trigger delay and heart rate, are chosen based on what mattered for us in a clinical imaging workflow.
+During my time as a research engineer at the Ludwig Boltzmann Institute at AKH 
+Vienna, I worked with DICOM data from cardiac 4D CT studies, extracting imaging 
+data from PACS, segmenting patient-specific heart models, and publishing research 
+on our experimental results. The metadata fields selected for this project, 
+including cardiac gating parameters like trigger delay and heart rate, are chosen 
+based on what actually mattered in that imaging workflow.
 
 ---
 
@@ -139,10 +163,11 @@ clinical-dicom-api/
 
 This project is a functional prototype. Moving it toward production would involve:
 
-- **Authentication** — Protect endpoints with API key or JWT token authentication so only authorized systems can submit imaging data
-- **Database layer** — Persist extracted metadata to PostgreSQL, enabling historical queries such as retrieving all CT studies for a given patient
-- **Async LLM calls** — Move Anthropic API calls to a background task queue (e.g. Celery + Redis) so large DICOM files don't block the request thread
-- **FHIR compliance validation** — Validate generated ImagingStudy resources against the official HL7 FHIR R4 schema before returning them
-- **Expanded FHIR support** — Add conversion for related resources such as `Patient` and `DiagnosticReport` to support fuller EHR integration workflows
-- **CI/CD pipeline** — Add GitHub Actions to run tests and auto-build the Docker image on every push
-- **Broader DICOM tag coverage** — Extend the parser to handle multi-frame studies, structured reports (DICOM SR), and dose summary objects (RDSR)
+- **Authentication** - Protect endpoints with API key or JWT token authentication so only authorized systems can submit imaging data
+- **Database layer** - Persist extracted metadata to PostgreSQL, enabling historical queries such as retrieving all CT studies for a given patient
+- **Async LLM calls** - Move Anthropic API calls to a background task queue (e.g. Celery + Redis) so large DICOM files don't block the request thread
+- **FHIR compliance validation** - Validate generated ImagingStudy resources against the official HL7 FHIR R4 schema before returning them
+- **Expanded FHIR support** - Add conversion for related resources such as `Patient` and `DiagnosticReport` to support fuller EHR integration workflows
+- **CI/CD pipeline** - Add GitHub Actions to run tests and auto-build the Docker image on every push
+- **Cloud Deployment** - Deploy to Azure Container Apps or AWS ECS using the existing Dockerfile
+- **Broader DICOM tag coverage** - Extend the parser to handle multi-frame studies, structured reports (DICOM SR), and dose summary objects (RDSR)
