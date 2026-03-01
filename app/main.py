@@ -3,11 +3,19 @@ from app.dicom_parser import extract_metadata
 from app.llm_client import summarize_metadata, compare_metadata
 from app.fhir_converter import to_fhir_imaging_study
 from app.schemas import DicomMetadata, SummaryResponse, CompareResponse, FHIRResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Clinical DICOM Analysis API",
     description="Extracts metadata from DICOM files and generates plain-language clinical summaries using LLM.",
     version="1.0.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/health")
